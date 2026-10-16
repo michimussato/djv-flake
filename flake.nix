@@ -28,10 +28,6 @@
           rev = "4d90982b4085adf4d150f1bf0b0b4a5490b023d5";
           submodules = true;
           shallow = true;
-          # No complaints here??
-      #    hash = "";
-      #    hash = pkgs.lib.fakeHash;
-      #    hash = "sha256-p3fK9FscHWOAHI9e7tV1t7zw5RtRl7na0h4TiQJZofI=";
         };
 
         # ISSUES

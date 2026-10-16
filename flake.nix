@@ -1,5 +1,6 @@
 # export NIXPKGS_ALLOW_INSECURE=1
 # nix build --impure
+# nix run github:michimussato/djv-flake --impure
 
 {
   description = "DJV Flake";
@@ -9,10 +10,13 @@
   outputs = { self, nixpkgs }:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      default-version = "3.7.5";
     in
 
-    {
-      packages.x86_64-linux.default = pkgs.stdenv.mkDerivation {
+    rec {
+      packages.x86_64-linux.default = packages.x86_64-linux."djv-${default-version}";
+
+      packages.x86_64-linux."djv-3.7.5" = pkgs.stdenv.mkDerivation {
         # package name
         pname = "djv";
         # package version
@@ -21,10 +25,6 @@
         # https://noogle.dev/f/builtins/fetchGit/
         src = builtins.fetchGit {
           url = "https://github.com/grizzlypeak3d/djv.git";
-      #    owner = "grizzlypeak3d";
-      #    repo = "djv";
-      #    tag = finalAttrs.version;
-      #    rev = "refs/tags/3.7.5";
           rev = "4d90982b4085adf4d150f1bf0b0b4a5490b023d5";
           submodules = true;
           shallow = true;
@@ -61,7 +61,6 @@
           echo "out = $out"
           env
 
-
           echo "tree src = "
           # tree $src
 
@@ -82,9 +81,6 @@
           # #export CMAKE_PREFIX_PATH=$out
           # sh $src/sbuild-linux.sh . Release default
 
-          # echo "tree src/build-Release = "
-          # tree $src/build-Release
-
           mkdir -p $out
           # Can we set
           # export CMAKE_INSTALL_PREFIX=$out
@@ -99,16 +95,7 @@
           # NIX_BUILD_TOP=/nix/var/nix/builds/nix-3014615-662604354
           # cmake -S /nix/store/j2bryr4053p207cj6cnn7vaiia2dcxjy-source/deps/tlRender/deps/ftk/etc/SuperBuild -B ftk-Release -C /nix/store/j2bryr4053p207cj6cnn7vaiia2dcxjy-source/etc/Config/default.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/nix/var/nix/builds/nix-3014615-662604354/install-Release -DCMAKE_PREFIX_PATH=/nix/var/nix/builds/nix-3014615-662604354/install-Release
           cp -a $NIX_BUILD_TOP/install-Release/. $out
-          # mkdir -p $out/lib/icons
-          # cp -a $src/etc/Icons/. $out/lib/icons/
         '';
-
-      #  postPatch = ''
-      #    substituteInPlace cmake/Modules/djvPackage.cmake \
-      #      --replace-fail \
-      #        ' ''${CMAKE_INSTALL_PREFIX}/etc/tlRender/LICENSE_' \
-      #        " ${pkgs.tlrender}/etc/tlRender/LICENSE_"
-      #  '';
 
         nativeBuildInputs = with pkgs; [
           cmake
@@ -264,10 +251,10 @@
         doCheck = false;
 
         meta = {
-          description = "Professional review software for VFX, animation, and film production";
+          description = "Professional review software for VFX, animation, and film production. Defaults to version ${default-version}.";
           homepage = "https://github.com/grizzlypeak3d/DJV";
-          platforms = with pkgs.lib.platforms; linux ++ darwin;
-          maintainers = with pkgs.lib.maintainers; [ blitz ];
+          platforms = with pkgs.lib.platforms; linux;  # ++ darwin;
+          maintainers = "michimussato@etik.com";
           license = pkgs.lib.licenses.bsd3;
           mainProgram = "djv";
         };

@@ -1,6 +1,6 @@
 # # export NIXPKGS_ALLOW_INSECURE=1
 # nix build --option sandbox false
-# nix run github:michimussato/djv-flake --option sandbox false
+# nix run github:michimussato/djv-flake --verbose --option sandbox false
 
 {
   description = "DJV Flake";

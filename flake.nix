@@ -1,6 +1,6 @@
-# export NIXPKGS_ALLOW_INSECURE=1
-# nix build --impure
-# nix run github:michimussato/djv-flake --impure
+# # export NIXPKGS_ALLOW_INSECURE=1
+# nix build --option sandbox false
+# nix run github:michimussato/djv-flake --option sandbox false
 
 {
   description = "DJV Flake";
@@ -8,12 +8,31 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
   outputs = { self, nixpkgs }:
+
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      # https://discourse.nixos.org/t/allow-insecure-packages-in-flake-nix/34655/8
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+#        inherit system;
+        config = {
+          permittedInsecurePackages = [
+            "openexr-2.5.10"
+            "ilmbase-2.5.10"
+          ];
+        };
+      };
+      # pkgs = nixpkgs.legacyPackages.x86_64-linux;
       default-version = "3.7.5";
     in
 
     rec {
+#      nixpkgs.config = {
+#        allowUnfree = true;
+#        permittedInsecurePackages = [
+#          "openexr-2.5.10"
+#        ];
+#      };
+
       packages.x86_64-linux.default = packages.x86_64-linux."djv-${default-version}";
 
       packages.x86_64-linux."djv-3.7.5" = pkgs.stdenv.mkDerivation {

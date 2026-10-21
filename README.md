@@ -12,5 +12,5 @@ References:
 - [Grizzly Peak 3D](https://grizzlypeak3d.com/)
 
 ```shell
-nix run github:michimussato/djv-flake/main
+nix run github:michimussato/djv-flake/main --verbose --option sandbox false
 ```

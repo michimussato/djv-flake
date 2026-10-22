@@ -25,18 +25,10 @@
         ];
       };
     };
-    # pkgs = nixpkgs.legacyPackages.x86_64-linux;
     default-version = "3.7.5";
   in
 
   rec {
-#      nixpkgs.config = {
-#        allowUnfree = true;
-#        permittedInsecurePackages = [
-#          "openexr-2.5.10"
-#        ];
-#      };
-
     packages.x86_64-linux.default = packages.x86_64-linux."djv-${default-version}";
 
     packages.x86_64-linux."djv-3.7.5" = pkgs.stdenv.mkDerivation {
@@ -59,50 +51,15 @@
       ## - https://github.com/NixOS/nixpkgs/pull/255091
       ## -> dontWrapQtApps = true;
 
-    #  # unpackPhase
-    #  dontUnpack = true;
-    #  # patchPhase
-    #  dontPatch = true;
-    #  # configurePhase
-    #  dontWrapQtApps = true;
-    #  buildPhase = ''
-    #    pwd
-    #    echo $src
-    #    echo $out
-    #    ls -al .
-    #  '';
-    #  # checkPhase
-    #  installPhase = '''';
-    #  # fixupPhase
-    #  # installCheckPhase
-    #  # distPhase
-
-      # unpackPhase = true;
-      # nix-build --option sandbox false
       buildCommand = ''
         echo "src = $src"
         echo "out = $out"
-        env
 
-        echo "tree src = "
-        # tree $src
-
-        # ls -al $src
-        # echo "NIX_SSL_CERT_FILE: $NIX_SSL_CERT_FILE"
-        # ls -al $src/etc/Linux
-        # ls -al $src
-        sh $src/etc/Linux/sbuild.sh $src Release
+        # Todo:
+        #  - [ ] find a way to writa a custom local.cmake file
         # touch ./etc/Config/local.cmake
         # echo "set(TLRENDER_FFMPEG_MINIMAL OFF CACHE BOOL \"\")" >> ./etc/Config/local.cmake
-        # cat ./etc/Config/local.cmake
-        # mkdir -p $out
-        # cp -r $src/ $out
-        # ls -al $out
-        # # chmod +x $src/sbuild-linux.sh
-        # pushd $out
-        # #export CMAKE_INSTALL_PREFIX=$out
-        # #export CMAKE_PREFIX_PATH=$out
-        # sh $src/sbuild-linux.sh . Release default
+        sh $src/etc/Linux/sbuild.sh $src Release
 
         mkdir -p $out
         # Can we set

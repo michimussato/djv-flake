@@ -2,6 +2,14 @@
 # nix build --option sandbox false
 # nix run github:michimussato/djv-flake --verbose --option sandbox false
 
+# Todo
+#  - [ ] seems like this gets garbage collected so that
+#        the `xdg.desktopEntries.djv` desktop entry does not
+#        work anymore.
+#  - [ ] maybe it's simpler for now to just keep it as a derivation
+#        instead of a self containing flake which I don't really know
+#        how to work with.
+
 {
   description = "DJV Flake";
 
@@ -25,17 +33,15 @@
         ];
       };
     };
-    default-version = "3.7.5";
+    pname = "djv";
+    version = "3.7.5";
   in
 
   rec {
-    packages.x86_64-linux.default = packages.x86_64-linux."djv-${default-version}";
+    # packages.x86_64-linux.default = packages.x86_64-linux."djv-${version-dashed}";
 
-    packages.x86_64-linux."djv-3.7.5" = pkgs.stdenv.mkDerivation {
-      # package name
-      pname = "djv";
-      # package version
-      version = "3.7.5";
+    packages.x86_64-linux."djv-${version}" = pkgs.stdenv.mkDerivation {
+      inherit pname version;
 
       # https://noogle.dev/f/builtins/fetchGit/
       src = builtins.fetchGit {
@@ -233,12 +239,12 @@
       doCheck = false;
 
       meta = {
-        description = "Professional review software for VFX, animation, and film production. Defaults to version ${default-version}.";
+        description = "Professional review software for VFX, animation, and film production. Defaults to version ${version}.";
         homepage = "https://github.com/grizzlypeak3d/DJV";
         platforms = with pkgs.lib.platforms; linux;  # ++ darwin;
         maintainers = "michimussato@etik.com";
         license = pkgs.lib.licenses.bsd3;
-        mainProgram = "djv";
+        mainProgram = pname;
       };
     };
   };

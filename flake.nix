@@ -35,12 +35,13 @@
     };
     pname = "djv";
     version = "3.7.5";
+    version-dashed = builtins.replaceStrings ["."] ["-"] version;
   in
 
   rec {
     # packages.x86_64-linux.default = packages.x86_64-linux."djv-${version-dashed}";
 
-    packages.x86_64-linux."djv-${version}" = pkgs.stdenv.mkDerivation {
+    packages.x86_64-linux."djv-${version-dashed}" = pkgs.stdenv.mkDerivation {
       inherit pname version;
 
       # https://noogle.dev/f/builtins/fetchGit/

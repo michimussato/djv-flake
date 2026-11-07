@@ -14,3 +14,9 @@ References:
 ```shell
 nix run github:michimussato/djv-flake/main --verbose --option sandbox false
 ```
+
+## Update locally cached Flake
+
+```shell
+nix flake update --flake github:michimussato/djv-flake
+```

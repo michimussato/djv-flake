@@ -1,5 +1,6 @@
 <!-- TOC -->
 * [Flake DJV](#flake-djv)
+  * [Update locally cached Flake](#update-locally-cached-flake)
 <!-- TOC -->
 
 ---
